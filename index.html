@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Package</title>
+    <style>
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .blue-box {
+        width: 650px;
+        height: 650px;
+        background-color: rgb(136, 204, 250);
+        margin: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+        border-radius: 8px;
+        box-shadow: 10px 10px #8f8f8f;
+      }
+      .small-box {
+        width: 450px;
+        height: 450px;
+      }
+
+      .card-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 10px;
+      }
+      .package-card,
+      .payment-card {
+        width: 180px;
+        height: 280px;
+        margin: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: black;
+        font-size: 60px;
+        border-radius: 4px;
+        position: relative;
+      }
+      .package-card:hover,
+      .payment-card:hover {
+        scale: 1.1;
+      }
+      .package-card {
+        background-color: rgba(200, 153, 255, 0.8);
+      }
+      .payment-card {
+        background-color: rgba(255, 255, 153, 0.8);
+      }
+
+      .active-payment,
+      .active-package {
+        border: 2px solid black;
+      }
+      .active-payment {
+        background-color: rgb(252, 120, 120) !important;
+      }
+      .active-package {
+        background-color: rgba(133, 255, 133, 0.8) !important;
+      }
+
+      .enterprise-box,
+      .professional-box,
+      .standard-box {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background-color: rgba(145, 145, 145, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+      }
+      .package-card:hover .enterprise-box,
+      .package-card:hover .professional-box,
+      .package-card:hover .standard-box {
+        background-color: rgba(252, 120, 120, 0.8);
+      }
+
+      .white-box {
+        width: 550px;
+        height: 550px;
+        background-color: white;
+        margin: 20px auto;
+        border-radius: 20px;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        color: black;
+        font-size: 20px;
+      }
+      .small-white-box {
+        width: 400px;
+        height: 400px;
+      }
+
+      h2 {
+        width: 90%;
+        font-size: 28px;
+        text-align: center;
+      }
+      form {
+        margin: 1rem;
+        width: 93%;
+      }
+      textarea,
+      input[type="submit"] {
+        width: 100%;
+        height: 40px;
+      }
+      input:focus,
+      textarea:focus {
+        outline-color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="blue-box">
+      <div class="card-container">
+        <div class="package-card" data-package="ENTERPRISE">
+          <div class="enterprise-box">ENTERPRISE</div>
+          $1999
+        </div>
+        <div class="package-card" data-package="PROFESSIONAL">
+          <div class="professional-box">PROFESSIONAL</div>
+          $799
+        </div>
+        <div class="package-card" data-package="STANDARD">
+          <div class="standard-box">STANDARD</div>
+          $349
+        </div>
+      </div>
+      <div class="card-container">
+        <div class="payment-card" data-payment="PayPal">PayPal</div>
+        <div class="payment-card" data-payment="Checks">Checks</div>
+        <div class="payment-card" data-payment="Cash">Cash</div>
+      </div>
+    </div>
+    <div class="blue-box">
+      <div class="white-box">
+        <h2 id="software-package">Software Package</h2>
+        <form id="purchase-form">
+          <hr />
+          <span>Price*: $xxx.xx</span>
+          <hr />
+          <span id="payment-type">Payment Type*: PayPal / Checks / Cash</span>
+          <hr />
+          Prefix* :
+          <select id="prefix-select">
+            <option value="" disabled selected>Please select</option>
+            <option value="Ms">Miss</option>
+            <option value="Mr">Mr</option>
+          </select>
+          <hr />
+          Name* : <input type="text" id="name" name="name" />
+          <hr />
+          Phone* : <input type="text" id="phone" name="phone" />
+          <hr />
+          Address* : <br />
+          <textarea id="address" name="address"></textarea>
+          <hr />
+          <input type="submit" value="Buy" />
+        </form>
+      </div>
+    </div>
+    <div class="blue-box small-box" style="display: none;">
+      <div class="white-box small-white-box">
+        <h2>Receipt</h2>
+        <form>
+          <hr />
+          <span>Price: <span id="receipt-price"></span></span>
+          <hr />
+          <span>Payment Type: <span id="receipt-payment-type"></span></span>
+          <hr />
+          <span>Prefix: <span id="receipt-prefix"></span></span>
+          <hr />
+          <span>Name: <span id="receipt-name"></span></span>
+          <hr />
+          <span>Phone: <span id="receipt-phone"></span></span>
+          <hr />
+          <span>Address: <span id="receipt-address"></span></span>
+          <hr />
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const paymentCards = document.querySelectorAll(".payment-card");
+      const packageCards = document.querySelectorAll(".package-card");
+      const softwarePackageText = document.getElementById("software-package");
+      const paymentTypeText = document.getElementById("payment-type");
+      const form = document.getElementById("purchase-form");
+      const receiptBox = document.querySelector(".blue-box.small-box");
+
+      let selectedPackage = "";
+      let selectedPayment = "";
+
+      document.addEventListener("mousemove", (event) => {
+        const cursor = document.querySelector(".cursor-circle");
+        cursor.style.top = `${event.pageY}px`;
+        cursor.style.left = `${event.pageX}px`;
+      });
+
+      document.addEventListener("click", () => {
+        const cursor = document.querySelector(".cursor-circle");
+        cursor.style.animation = "click 0.1s";
+        setTimeout(() => {
+          cursor.style.animation = "none";
+        }, 100);
+      });
+
+      paymentCards.forEach(card =>
+        card.addEventListener("click", () => selectCard(card, "payment"))
+      );
+      packageCards.forEach(card =>
+        card.addEventListener("click", () => selectCard(card, "package"))
+      );
+
+      function selectCard(card, type) {
+        const isPayment = type === "payment";
+        const allCards = isPayment ? paymentCards : packageCards;
+        const activeClass = isPayment ? "active-payment" : "active-package";
+
+        allCards.forEach(c => c.classList.remove(activeClass));
+        card.classList.add(activeClass);
+
+        if (isPayment) {
+          selectedPayment = card.getAttribute("data-payment");
+          paymentTypeText.textContent = `Payment Type*: ${selectedPayment}`;
+        } else {
+          selectedPackage = card.getAttribute("data-package");
+          updatePackageDetails(card);
+        }
+        updateReceipt();
+      }
+
+      function updatePackageDetails(card) {
+        const price = card.textContent.match(/\$(\d+(\.\d+)?)/)[0];
+        form.querySelector("span").textContent = `Price*: ${price}`;
+        softwarePackageText.textContent = `${capitalize(selectedPackage)} Package`;
+        softwarePackageText.style.color = getColor(selectedPackage);
+      }
+
+      function getColor(packageType) {
+        switch (packageType) {
+          case "ENTERPRISE":
+            return "#FFD700";
+          case "PROFESSIONAL":
+            return "#8A2BE2";
+          case "STANDARD":
+            return "#00BFFF";
+        }
+      }
+
+      function updateReceipt() {
+        const price = form.querySelector("span").textContent.split(": ")[1];
+        const prefix = document.getElementById("prefix-select").value;
+        const name = document.getElementById("name").value;
+        const phone = document.getElementById("phone").value;
+        const address = document.getElementById("address").value;
+
+        if (selectedPackage && selectedPayment && prefix && name && phone && address) {
+          document.getElementById("receipt-price").textContent = `${price} (${capitalize(selectedPackage)} Package)`;
+          document.getElementById("receipt-payment-type").textContent = selectedPayment;
+          document.getElementById("receipt-prefix").textContent = prefix;
+          document.getElementById("receipt-name").textContent = name;
+          document.getElementById("receipt-phone").textContent = phone;
+          document.getElementById("receipt-address").textContent = address;
+          receiptBox.style.display = "block";
+        } else {
+          receiptBox.style.display = "none";
+        }
+      }
+
+      function validateForm(event) {
+        event.preventDefault();
+        if (selectedPackage && selectedPayment && document.getElementById("prefix-select").value &&
+            document.getElementById("name").value && document.getElementById("phone").value && document.getElementById("address").value) {
+          updateReceipt();
+        } else {
+          alert("Please fill valid information.");
+          receiptBox.style.display = "none";
+        }
+      }
+
+      function capitalize(word) {
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+      }
+
+      form.addEventListener("input", updateReceipt);
+      form.addEventListener("submit", validateForm);
+    </script>
+  </body>
+</html>
